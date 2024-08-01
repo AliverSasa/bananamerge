@@ -282,7 +282,8 @@ const ProfileCard = ({ address, isDropdown = false }: Iprops) => {
   }
   return (
     <div className='border w-full border-white rounded-xl relative pt-[100px] md:pt-[170px]'>
-      <img src='/profile-bar.png' className='absolute top-0' />
+      {/* <img src='/profile-bar.png' className='absolute top-0' /> */}
+      <img src='/banana_logo.png' className='absolute top-0 left-[45%] w-32 h-32' />
       <div className='flex justify-between p-6'>
         <div className='flex flex-col gap-2 items-start '>
           <div className='md:block hidden'>

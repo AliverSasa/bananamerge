@@ -15,7 +15,7 @@ const BuzzList = () => {
         <Sparkle className='text-main' />
 
         <div className="text-white text-[24px] lg:text-[36px] font-['Impact']">
-          {"What's New Today"}
+          {"Today's new banana"}
         </div>
 
         <Sparkle className='text-main' />

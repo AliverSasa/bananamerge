@@ -12,7 +12,7 @@ import CustomAvatar from '../Public/CustomAvatar';
 import { getPinDetailByPid } from '../../api/buzz';
 import { environment } from '../../utils/environments';
 import { Pin } from '../../api/request';
-import ProfileCard from './ProfileCard';
+// import ProfileCard from './ProfileCard';
 
 type IProps = {
   buzzItem: Pin | undefined;
@@ -298,9 +298,9 @@ const ForwardBuzzCard = ({ buzzItem }: IProps) => {
               </div>
             </div>
 
-            <div tabIndex={0} className='dropdown-content'>
+            {/* <div tabIndex={0} className='dropdown-content'>
               <ProfileCard address={buzzItem.address} isDropdown />
-            </div>
+            </div> */}
           </div>
         </div>
         <div

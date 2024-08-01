@@ -15,9 +15,10 @@ import { globalFeeRateAtom } from '../../store/user';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { image2Attach, removeFileFromList } from '../../utils/file';
 import useImagesPreview from '../../hooks/useImagesPreview';
-import { CreateOptions, IBtcConnector, IBtcEntity } from '@metaid/metaid';
+import { CreateOptions, IBtcConnector, IBtcEntity,loadBtc } from '@metaid/metaid';
 import { environment } from '../../utils/environments';
 import { Pin } from '../../api/request';
+import bananaSchema from "../../utils/banana.entity.js";
 
 type Iprops = {
   btcConnector: IBtcConnector;
@@ -58,11 +59,19 @@ const BuzzFormWrap = ({ btcConnector, quotePin }: Iprops) => {
     images: AttachmentItem[];
   }) => {
     setIsAdding(true);
-    const buzzEntity: IBtcEntity = await btcConnector.use('buzz');
+    // const buzzEntity: IBtcEntity = await btcConnector.use('buzz');
+
+
+    const brContent = buzz.content + '<br>'+ '🍌🍌🍌'
+    const options = { connector: btcConnector };
+    // @ts-ignore
+    const buzzEntity: IBtcEntity = await loadBtc(bananaSchema, options);
+
+    // const buzzEntity: IBtcEntity = await btcConnector.use('buzz');
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const finalBody: any = {
-        content: buzz.content,
+        content: brContent,
         contentType: 'text/plain',
       };
       if (!isEmpty(buzz.images)) {

@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import './globals.css';
 import './react-toastify.css';
 // import "react-toastify/dist/ReactToastify.css";
-import { MetaletWalletForBtc, btcConnect } from '@metaid/metaid';
+import { MetaletWalletForBtc, btcConnect,loadBtc } from '@metaid/metaid';
 
 import { useAtom, useSetAtom } from 'jotai';
 import {
@@ -32,6 +32,7 @@ import { environment } from './utils/environments';
 import { useMutation } from '@tanstack/react-query';
 import { fetchFollowingList } from './api/buzz';
 import Profile from './pages/Profile';
+import bananaSchema from "./utils/banana.entity.js";
 import FollowDetail from './pages/followDetail';
 
 function App() {
@@ -114,7 +115,10 @@ function App() {
     } else {
       setUserInfo(resUser);
       setConnected(true);
-      setBuzzEntity(await _btcConnector.use('buzz'));
+      // setBuzzEntity(await _btcConnector.use('buzz'));
+      const options = { connector: _btcConnector };
+      const _buzzEntity = await loadBtc(bananaSchema, options);
+      setBuzzEntity(_buzzEntity);
       console.log('your btc address: ', _btcConnector.address);
     }
   };
@@ -123,7 +127,9 @@ function App() {
     // await conirmMetaletMainnet();
     const _btcConnector = await btcConnect({ network: environment.network });
     setBtcConnector(_btcConnector);
-    const _buzzEntity = await _btcConnector.use('buzz');
+    // const _buzzEntity = await _btcConnector.use('buzz');
+    const options = { connector: _btcConnector };
+    const _buzzEntity = await loadBtc(bananaSchema, options);
     setBuzzEntity(_buzzEntity);
   };
 

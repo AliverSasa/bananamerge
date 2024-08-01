@@ -10,7 +10,8 @@ const config: Config = {
     themes: [
       {
         mytheme: {
-          primary: '#DAF773',
+          // primary: '#DAF773',
+          primary: 'rgb(250 204 21)',
           secondary: '#7C8D43',
         },
       },
@@ -19,7 +20,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        main: '#DAF773',
+        // main: '#DAF773',
+        main: 'rgb(250 204 21)',
         secondary: '#daf77380',
         white: '#fff',
         black: '#fafafa',
