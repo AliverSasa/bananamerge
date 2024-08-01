@@ -2,22 +2,24 @@ import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
-import { btcConnectorAtom } from '../../store/user';
 import { IBtcConnector } from '@metaid/metaid';
 import { environment } from '../../utils/environments';
 import { isNil } from 'ramda';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchBuzzs } from '../../api/buzz';
 import { Pin } from '../../api/request';
-import BuzzCard from './BuzzCard';
+import BuzzCard from '../Cards/BuzzCard';
+import { btcConnectorAtom } from '../../store/user';
 
 type Iprops = {
   address?: string;
-   queryKey?: string[];
+  queryKey?: string[];
+  showFollowButton?: boolean;
 };
 
 const AllNewBuzzList = ({
   address,
+  showFollowButton = true,
   queryKey = ['buzzes', environment.network],
 }: Iprops) => {
   const [total, setTotal] = useState<null | number>(null);
@@ -25,10 +27,14 @@ const AllNewBuzzList = ({
   const navigate = useNavigate();
   const { ref, inView } = useInView();
 
-  // const buzzEntity = useAtomValue(buzzEntityAtom);
   const btcConnector = useAtomValue(btcConnectorAtom);
   const getTotal = async (btcConnector: IBtcConnector) => {
-    setTotal(await btcConnector?.totalPin({ network: environment.network,path:['/protocols/simplebuzz', '/protocols/banana']}));
+    setTotal(
+      await btcConnector?.totalPin({
+        network: environment.network,
+        path: ['/protocols/simplebuzz', '/protocols/banana'],
+      })
+    );
   };
 
   useEffect(() => {
@@ -40,7 +46,7 @@ const AllNewBuzzList = ({
 
   const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery({
-      queryKey,
+      queryKey: [...queryKey],
       enabled: !isNil(btcConnector),
 
       queryFn: ({ pageParam }) =>
@@ -49,9 +55,9 @@ const AllNewBuzzList = ({
           limit: 5,
           btcConnector: btcConnector!,
           network: environment.network,
-          path:['/protocols/simplebuzz', '/protocols/banana'],
+          path: ['/protocols/simplebuzz', '/protocols/banana'],
           address,
-         }),
+        }),
       initialPageParam: 1,
       getNextPageParam: (lastPage, allPages) => {
         const nextPage = lastPage?.length ? allPages.length + 1 : undefined;
@@ -61,16 +67,14 @@ const AllNewBuzzList = ({
         return nextPage;
       },
     });
-
   const buzzes = data?.pages.map((pins: Pin[] | null) =>
-    
     (pins ?? []).map((pin) => {
-      console.log(pin)
       return (
         <BuzzCard
           key={pin.id}
           buzzItem={pin}
           onBuzzDetail={(txid) => navigate(`/buzz/${txid}`)}
+          showFollowButton={showFollowButton}
         />
       );
     })
@@ -106,11 +110,11 @@ const AllNewBuzzList = ({
             ) : (
               //:
               // hasNextPage ? (
-              // 	<div className="bg-[black] grid w-full place-items-center">
+              // 	<div className="bg-[black]  grid w-full place-items-center">
               // 		Load More
               // 	</div>
               // )
-              <div className='place-items-center'>No more results</div>
+              <div className=' place-items-center'>No more results</div>
             )}
           </button>
         </div>

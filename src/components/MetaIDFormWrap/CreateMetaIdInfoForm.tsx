@@ -9,9 +9,9 @@ import { MetaidUserInfo } from './CreateMetaIDFormWrap';
 import { useClipboard } from '@mantine/hooks';
 import Decimal from 'decimal.js-light';
 
-import CustomFeerate from '../CustomFeerate';
 import { globalFeeRateAtom } from '../../store/user';
 import { useAtomValue } from 'jotai';
+import CustomFeerate from '../Public/CustomFeerate';
 // import { useEffect, useState } from 'react';
 
 export type UserInfo = {

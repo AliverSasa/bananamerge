@@ -1328,10 +1328,10 @@
     ramda "^0.29.1"
     uuid "^9.0.1"
 
-"@metaid/metaid@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@metaid/metaid/-/metaid-1.4.1.tgz#a0dc22a5d2a25db14d4b90954650099992799731"
-  integrity sha512-Kefi5EeHJJkwjw/bBFqX5hjRI34vkI1J8s43Fzy6vEETguGr17QkzIMMxavDeFvxrOfAyRF22a/QrL9qiJHe7Q==
+"@metaid/metaid@^1.4.3":
+  version "1.4.3"
+  resolved "https://registry.npmjs.org/@metaid/metaid/-/metaid-1.4.3.tgz#cdc254264e3964f7ad15ab4c6b08c69bbfd6f568"
+  integrity sha512-P6V+Jtdt8BQTtLqt8wPHo19dk3GD8LiUGDNGKSyqzqk2Y7+E4tdDKs+hMBYT1PAYf9Ldz6JXc3dx8+MzLitKcA==
   dependencies:
     "@bitcoin-js/tiny-secp256k1-asmjs" "^2.2.3"
     "@metaid/metaid" "^1.2.7"
@@ -1740,6 +1740,11 @@
   version "7.0.15"
   resolved "https://registry.npmmirror.com/@types/json-schema/-/json-schema-7.0.15.tgz#596a1747233694d50f6ad8a7869fcb6f56cf5841"
   integrity sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
+
+"@types/md5@^2.3.5":
+  version "2.3.5"
+  resolved "https://registry.npmjs.org/@types/md5/-/md5-2.3.5.tgz#481cef0a896e3a5dcbfc5a8a8b02c05958af48a5"
+  integrity sha512-/i42wjYNgE6wf0j2bcTX6kuowmdL/6PE4IVitMpm2eYKBUuYCprdcWVK+xEF0gcV6ufMCRhtxmReGfc6hIK7Jw==
 
 "@types/node@*", "@types/node@^20.10.4":
   version "20.10.4"
@@ -4605,7 +4610,7 @@ md5.js@^1.3.4:
     inherits "^2.0.1"
     safe-buffer "^5.1.2"
 
-md5@^2.2.1:
+md5@^2.2.1, md5@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/md5/-/md5-2.3.0.tgz#c3da9a6aae3a30b46b7b0c349b87b110dc3bda4f"
   integrity sha512-T1GITYmFaKuO91vxyoQMFETst+O71VUPEU3ze5GNzDm0OWdP8v1ziTaAEPUr/3kLsY3Sftgz242A1SetQiDL7g==

@@ -7,11 +7,11 @@ import { isEmpty, isNil } from 'ramda';
 import { image2Attach } from '../../utils/file';
 import { MetaidUserInfo } from './CreateMetaIDFormWrap';
 import { useEffect } from 'react';
-import CustomFeerate from '../CustomFeerate';
 
 import { useAtomValue } from 'jotai';
 import { globalFeeRateAtom } from '../../store/user';
 import { environment } from '../../utils/environments';
+import CustomFeerate from '../Public/CustomFeerate';
 
 export type FormUserInfo = {
   name: string;

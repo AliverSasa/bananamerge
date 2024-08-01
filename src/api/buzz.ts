@@ -1,5 +1,6 @@
 // import { BuzzItem } from '../types';
 import axios from 'axios';
+import { BtcNetwork, Pin } from './request';
 import { IBtcConnector } from '@metaid/metaid';
 import { environment } from '../utils/environments';
 
@@ -18,19 +19,22 @@ export async function fetchBuzzs({
   limit,
   network,
   path,
-  address
+  address,
 }: {
   btcConnector: IBtcConnector;
   page: number;
   limit: number;
-  // @ts-ignore
   network: BtcNetwork;
   path?: string[];
   address?: string;
-  // @ts-ignore
 }): Promise<Pin[] | null> {
-  // @ts-ignore
-  const response = await btcConnector.getAllpin({ page, limit, network, path,address });
+  const response = await btcConnector.getAllpin({
+    page,
+    limit,
+    network,
+    path,
+    address,
+  });
   return response;
 }
 
@@ -39,7 +43,6 @@ export async function fetchMyFollowingBuzzs(params: {
   size: number;
   path: string;
   metaidList: string[];
-  // @ts-ignore
 }): Promise<Pin[] | null> {
   const url = `${environment.base_man_url}/api/getAllPinByPathAndMetaId`;
 
@@ -51,12 +54,12 @@ export async function fetchMyFollowingBuzzs(params: {
     return null;
   }
 }
+
 export async function fetchMyFollowingTotal(params: {
   page: number;
   size: number;
   path: string;
   metaidList: string[];
-  // @ts-ignore
 }): Promise<number | null> {
   const url = `${environment.base_man_url}/api/getAllPinByPathAndMetaId`;
 
@@ -68,12 +71,12 @@ export async function fetchMyFollowingTotal(params: {
     return null;
   }
 }
+
 export async function fetchMyFollowingBuzzsWithTotal(params: {
   page: number;
   size: number;
   path: string;
   metaidList: string[];
-    // @ts-ignore
 }): Promise<{ total: number; currentPage: Pin[] } | null> {
   const url = `${environment.base_man_url}/api/getAllPinByPathAndMetaId`;
 
@@ -123,7 +126,6 @@ export async function getPinDetailByPid({
   pid,
 }: {
   pid: string;
-    // @ts-ignore
 }): Promise<Pin | undefined> {
   const url = `${environment.base_man_url}/api/pin/${pid}`;
 
@@ -218,7 +220,6 @@ export type FeeRateApi = {
 export async function fetchFeeRate({
   netWork,
 }: {
-    // @ts-ignore
   netWork?: BtcNetwork;
 }): Promise<FeeRateApi> {
   const response = await fetch(

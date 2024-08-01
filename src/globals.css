@@ -34,19 +34,3 @@ body {
 		cursor: pointer !important;
 	}
 }
-.title-font{
-	font-family: 'Playwrite MX', sans-serif;
-}
-.bg-user-area {
-    background: url('/banana_tip.png') no-repeat center;
-	background-size: contain;
-	position: relative;
-  }
-  .pos{
-	top: 42%;
-  left: 52%; 
-  width: 36px; 
-  height: 36px; 
-  transform: translate(-50%, -50%);
-  object-fit: cover;
-  }

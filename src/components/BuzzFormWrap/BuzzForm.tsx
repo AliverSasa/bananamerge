@@ -5,7 +5,9 @@ import { Controller, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import cls from 'classnames';
 import { IsEncrypt, mergeFileLists } from '../../utils/file';
 import { isNil } from 'ramda';
-import CustomFeerate from '../CustomFeerate';
+import { Pin } from '../../api/request';
+import ForwardBuzzCard from '../Cards/ForwardBuzzCard';
+import CustomFeerate from '../Public/CustomFeerate';
 
 export interface AttachmentItem {
   fileName: string;
@@ -24,6 +26,7 @@ type IProps = {
   onClearImageUploads: () => void;
   filesPreview: string[];
   handleRemoveImage: (index: number) => void;
+  quotePin?: Pin;
 };
 
 export type BuzzData = {
@@ -67,6 +70,7 @@ const BuzzForm = ({
   onClearImageUploads,
   filesPreview,
   handleRemoveImage,
+  quotePin,
 }: IProps) => {
   const {
     register,
@@ -74,20 +78,7 @@ const BuzzForm = ({
     formState: { errors },
     getValues,
   } = buzzFormHandle;
-  // const content = watch("content");
-  // const [gas, setGas] = useState<null | number>(null);
-
-  // const getGas = async () => {
-  // 	const fileArr = !isNil(files) && files?.length !== 0 ? await image2Attach(files) : [];
-  // 	const fileGas = isEmpty(fileArr) ? 0 : sum(fileArr.map((d) => d.size)) * 2;
-  // 	const contentGas = (content?.length ?? 0) * 2;
-  // 	setGas(fileGas + contentGas);
-  // };
-
-  // useEffect(() => {
-  // 	getGas();
-  // 	// eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [files, content]);
+  const isQuoted = !isNil(quotePin);
 
   return (
     <form
@@ -95,20 +86,35 @@ const BuzzForm = ({
       className='mt-8 flex flex-col gap-6'
     >
       <div className='flex flex-col gap-2 '>
-        <div className='relative'>
+        <div
+          className={cls('relative rounded-md  ', {
+            'p-4 border-white/20 rounded-md border': isQuoted,
+          })}
+        >
           <textarea
+            placeholder={
+              isQuoted
+                ? 'When you repost a buzz, you can leave this area empty.'
+                : ''
+            }
             className={cls(
-              'textarea textarea-bordered focus:outline-none border-white text-white bg-[black] textarea-sm h-[160px] w-full ',
+              'textarea textarea-bordered focus:outline-none border-none  text-white bg-[black] textarea-sm h-[160px] w-full ',
               {
                 'textarea-error': errors.content,
               }
             )}
-            {...register('content', { required: true })}
+            {...register('content', { required: !isQuoted })}
           />
-          {errors.content && (
+
+          {errors.content && !isQuoted && (
             <span className='text-error absolute left-0 bottom-[-24px] text-sm'>
               Buzz content can't be empty.
             </span>
+          )}
+          {isQuoted && (
+            <div className='p-2'>
+              <ForwardBuzzCard buzzItem={quotePin} />
+            </div>
           )}
         </div>
         <div className='flex items-center self-end gap-2'>
@@ -193,7 +199,7 @@ const BuzzForm = ({
         className='btn btn-primary btn-sm rounded-full font-medium w-[80px] flex self-center'
         type='submit'
       >
-        Post
+        {isQuoted ? 'Repost' : 'Post'}
       </button>
     </form>
   );

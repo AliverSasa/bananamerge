@@ -28,4 +28,14 @@ export default defineConfig({
     // },
     minify: false,
   },
+  // server: {
+  //   host: '0.0.0.0',
+  //   proxy: {
+  //     '/api/trans/vip/translate': {
+  //       // target: 'https://fanyi-api.baidu.com/api/trans/vip/translate',
+  //       target: 'https://api.metaid.io/baidufanyi/api/trans/vip/translate',
+  //       changeOrigin: true,
+  //     },
+  //   },
+  // },
 });

@@ -7,9 +7,13 @@ import { useNavigate } from 'react-router-dom';
 // import { environment } from '../../utils/environments';
 import { isEmpty } from 'ramda';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { fetchFollowingList, fetchMyFollowingBuzzs, fetchMyFollowingTotal} from '../../api/buzz';
+import {
+  fetchFollowingList,
+  fetchMyFollowingBuzzs,
+  fetchMyFollowingTotal,
+} from '../../api/buzz';
 import { Pin } from '../../api/request';
-import BuzzCard from './BuzzCard';
+import BuzzCard from '../Cards/BuzzCard';
 import { btcConnectorAtom } from '../../store/user';
 
 const FollowingBuzzList = () => {
@@ -19,8 +23,6 @@ const FollowingBuzzList = () => {
   const { ref, inView } = useInView();
   const btcConnector = useAtomValue(btcConnectorAtom);
   // const buzzEntity = useAtomValue(buzzEntityAtom);
-
- 
 
   const { data: myFollowingListData } = useQuery({
     queryKey: ['myFollowing', btcConnector?.metaid],
@@ -32,20 +34,27 @@ const FollowingBuzzList = () => {
       }),
   });
 
-  const getTotal = async ( ) => {
-    setTotal(await fetchMyFollowingTotal({page: 1, size:1, path: '/protocols/simplebuzz,/protocols/banana', metaidList: myFollowingListData?.list ?? []}));
+  const getTotal = async () => {
+    setTotal(
+      await fetchMyFollowingTotal({
+        page: 1,
+        size: 1,
+        path: '/protocols/simplebuzz,/protocols/banana',
+        metaidList: myFollowingListData?.list ?? [],
+      })
+    );
   };
-  console.log(total)
+  console.log(total);
 
   useEffect(() => {
-    if (!isEmpty(myFollowingListData?.list ?? [] )) {
-      getTotal( );
+    if (!isEmpty(myFollowingListData?.list ?? [])) {
+      getTotal();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ ]);
+  }, []);
 
   const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } =
-    useInfiniteQuery({ 
+    useInfiniteQuery({
       queryKey: ['following', 'buzzes'],
       enabled: !isEmpty(myFollowingListData?.list ?? []),
 
@@ -53,7 +62,7 @@ const FollowingBuzzList = () => {
         fetchMyFollowingBuzzs({
           page: pageParam,
           size: 5,
-          path: '/protocols/simplebuzz,/protocols/banana', 
+          path: '/protocols/simplebuzz,/protocols/banana',
           metaidList: myFollowingListData?.list ?? [],
         }),
       initialPageParam: 1,

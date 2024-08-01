@@ -15,15 +15,18 @@ import { globalFeeRateAtom } from '../../store/user';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { image2Attach, removeFileFromList } from '../../utils/file';
 import useImagesPreview from '../../hooks/useImagesPreview';
-import { CreateOptions, IBtcConnector, IBtcEntity,loadBtc } from '@metaid/metaid';
+import { CreateOptions, IBtcConnector, IBtcEntity } from '@metaid/metaid';
 import { environment } from '../../utils/environments';
-import bananaSchema from "../../utils/banana.entity.js";
+import { Pin } from '../../api/request';
 
 type Iprops = {
   btcConnector: IBtcConnector;
+  quotePin?: Pin;
 };
 
-const BuzzFormWrap = ({ btcConnector }: Iprops) => {
+const BuzzFormWrap = ({ btcConnector, quotePin }: Iprops) => {
+  const isQuoted = !isNil(quotePin);
+
   const [isAdding, setIsAdding] = useState(false);
 
   const globalFeerate = useAtomValue(globalFeeRateAtom);
@@ -55,23 +58,18 @@ const BuzzFormWrap = ({ btcConnector }: Iprops) => {
     images: AttachmentItem[];
   }) => {
     setIsAdding(true);
-    const brContent = buzz.content + '<br>'+ '🍌🍌🍌'
-    const options = { connector: btcConnector };
-    // @ts-ignore
-    const buzzEntity: IBtcEntity = await loadBtc(bananaSchema, options);
-
-    // const buzzEntity: IBtcEntity = await btcConnector.use('buzz');
+    const buzzEntity: IBtcEntity = await btcConnector.use('buzz');
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const finalBody: any = {
-        content: brContent,
+        content: buzz.content,
         contentType: 'text/plain',
       };
       if (!isEmpty(buzz.images)) {
         const fileOptions: CreateOptions[] = [];
 
         const fileEntity = await btcConnector!.use('file');
-        // 🍌🍌🍌🍌🍌🍌🍌🍌🍌🍌🍌🍌🍌🍌
+
         for (const image of buzz.images) {
           fileOptions.push({
             body: Buffer.from(image.data, 'hex').toString('base64'),
@@ -100,6 +98,9 @@ const BuzzFormWrap = ({ btcConnector }: Iprops) => {
       //   await sleep(5000);
 
       console.log('finalBody', finalBody);
+      if (!isNil(quotePin)) {
+        finalBody.quotePin = quotePin.id;
+      }
 
       const createRes = await buzzEntity!.create({
         dataArray: [
@@ -122,12 +123,12 @@ const BuzzFormWrap = ({ btcConnector }: Iprops) => {
       if (!isNil(createRes?.revealTxIds[0])) {
         // await sleep(5000);
         queryClient.invalidateQueries({ queryKey: ['buzzes'] });
-        toast.success('create buzz successfully');
+        toast.success(`${isQuoted ? 'repost' : 'create'} buzz successfully`);
         buzzFormHandle.reset();
         onClearImageUploads();
 
         const doc_modal = document.getElementById(
-          'new_buzz_modal'
+          isQuoted ? 'repost_buzz_modal_' + quotePin.id : 'new_buzz_modal'
         ) as HTMLDialogElement;
         doc_modal.close();
       }
@@ -168,6 +169,7 @@ const BuzzFormWrap = ({ btcConnector }: Iprops) => {
         buzzFormHandle={buzzFormHandle}
         onClearImageUploads={onClearImageUploads}
         filesPreview={filesPreview}
+        quotePin={quotePin}
       />
     </LoadingOverlay>
   );
