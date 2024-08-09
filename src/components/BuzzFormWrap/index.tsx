@@ -1,23 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import { useMutation, useQueryClient } from '@tanstack/react-query';
 // import { createBuzz } from '../api/buzz';
-import BuzzForm, { AttachmentItem, BuzzData } from './BuzzForm';
+import BuzzForm, { AttachmentItem, BuzzData } from "./BuzzForm";
 // import { v4 as uuidv4 } from 'uuid';
-import { toast } from 'react-toastify';
-import LoadingOverlay from 'react-loading-overlay-ts';
+import { toast } from "react-toastify";
+import LoadingOverlay from "react-loading-overlay-ts";
 // import dayjs from 'dayjs';
-import { useAtomValue } from 'jotai';
-import { isEmpty, isNil } from 'ramda';
-import { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { globalFeeRateAtom } from '../../store/user';
+import { useAtomValue } from "jotai";
+import { isEmpty, isNil } from "ramda";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { globalFeeRateAtom } from "../../store/user";
 // import { sleep } from '../../utils/time';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { image2Attach, removeFileFromList } from '../../utils/file';
-import useImagesPreview from '../../hooks/useImagesPreview';
-import { CreateOptions, IBtcConnector, IBtcEntity } from '@metaid/metaid';
-import { environment } from '../../utils/environments';
-import { Pin } from '../../api/request';
+import { SubmitHandler, useForm } from "react-hook-form";
+import { image2Attach, removeFileFromList } from "../../utils/file";
+import useImagesPreview from "../../hooks/useImagesPreview";
+import { CreateOptions, IBtcConnector, IBtcEntity,loadBtc } from "@metaid/metaid";
+import { environment } from "../../utils/environments";
+import { Pin } from "../../api/request";
+import bananaSchema from "../../utils/banana.entity.js";
 
 type Iprops = {
   btcConnector: IBtcConnector;
@@ -32,13 +33,13 @@ const BuzzFormWrap = ({ btcConnector, quotePin }: Iprops) => {
   const globalFeerate = useAtomValue(globalFeeRateAtom);
   const queryClient = useQueryClient();
   const buzzFormHandle = useForm<BuzzData>();
-  const files = buzzFormHandle.watch('images');
+  const files = buzzFormHandle.watch("images");
 
   const [filesPreview, setFilesPreview] = useImagesPreview(files);
 
   const onClearImageUploads = () => {
     setFilesPreview([]);
-    buzzFormHandle.setValue('images', [] as any);
+    buzzFormHandle.setValue("images", [] as any);
   };
 
   const onCreateSubmit: SubmitHandler<BuzzData> = async (data) => {
@@ -58,30 +59,37 @@ const BuzzFormWrap = ({ btcConnector, quotePin }: Iprops) => {
     images: AttachmentItem[];
   }) => {
     setIsAdding(true);
-    const buzzEntity: IBtcEntity = await btcConnector.use('buzz');
+    // const buzzEntity: IBtcEntity = await btcConnector.use('buzz');
+
+    const brContent = buzz.content + "<br>" + "🍌🍌🍌";
+    const options = { connector: btcConnector };
+    // @ts-ignore
+    const buzzEntity: IBtcEntity = await loadBtc(bananaSchema, options);
+
+    // const buzzEntity: IBtcEntity = await btcConnector.use('buzz');
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const finalBody: any = {
-        content: buzz.content,
-        contentType: 'text/plain',
+        content: brContent,
+        contentType: "text/plain",
       };
       if (!isEmpty(buzz.images)) {
         const fileOptions: CreateOptions[] = [];
 
-        const fileEntity = await btcConnector!.use('file');
+        const fileEntity = await btcConnector!.use("file");
 
         for (const image of buzz.images) {
           fileOptions.push({
-            body: Buffer.from(image.data, 'hex').toString('base64'),
+            body: Buffer.from(image.data, "hex").toString("base64"),
             contentType: `${image.fileType};binary`,
-            encoding: 'base64',
+            encoding: "base64",
             flag: environment.flag,
           });
         }
         const imageRes = await fileEntity.create({
           dataArray: fileOptions,
           options: {
-            noBroadcast: 'no',
+            noBroadcast: "no",
             feeRate: Number(globalFeerate),
             service: {
               address: environment.service_address,
@@ -91,14 +99,14 @@ const BuzzFormWrap = ({ btcConnector, quotePin }: Iprops) => {
           },
         });
 
-        console.log('imageRes', imageRes);
+        console.log("imageRes", imageRes);
         finalBody.attachments = imageRes.revealTxIds.map(
-          (rid) => 'metafile://' + rid + 'i0'
+          (rid) => "metafile://" + rid + "i0"
         );
       }
       //   await sleep(5000);
 
-      console.log('finalBody', finalBody);
+      console.log("finalBody", finalBody);
       if (!isNil(quotePin)) {
         finalBody.quotePin = quotePin.id;
       }
@@ -107,12 +115,12 @@ const BuzzFormWrap = ({ btcConnector, quotePin }: Iprops) => {
         dataArray: [
           {
             body: JSON.stringify(finalBody),
-            contentType: 'text/plain;utf-8',
+            contentType: "text/plain;utf-8",
             flag: environment.flag,
           },
         ],
         options: {
-          noBroadcast: 'no',
+          noBroadcast: "no",
           feeRate: Number(globalFeerate),
           service: {
             address: environment.service_address,
@@ -121,31 +129,31 @@ const BuzzFormWrap = ({ btcConnector, quotePin }: Iprops) => {
           // network: environment.network,
         },
       });
-      console.log('create res for inscribe', createRes);
+      console.log("create res for inscribe", createRes);
       if (!isNil(createRes?.revealTxIds[0])) {
         // await sleep(5000);
-        queryClient.invalidateQueries({ queryKey: ['buzzes'] });
-        toast.success(`${isQuoted ? 'repost' : 'create'} buzz successfully`);
+        queryClient.invalidateQueries({ queryKey: ["buzzes"] });
+        toast.success(`${isQuoted ? "repost" : "create"} buzz successfully`);
         buzzFormHandle.reset();
         onClearImageUploads();
 
         const doc_modal = document.getElementById(
-          isQuoted ? 'repost_buzz_modal_' + quotePin.id : 'new_buzz_modal'
+          isQuoted ? "repost_buzz_modal_" + quotePin.id : "new_buzz_modal"
         ) as HTMLDialogElement;
         doc_modal.close();
       }
     } catch (error) {
-      console.log('error', error);
+      console.log("error", error);
       const errorMessage = (error as any)?.message ?? error;
       const toastMessage = errorMessage?.includes(
-        'Cannot read properties of undefined'
+        "Cannot read properties of undefined"
       )
-        ? 'User Canceled'
+        ? "User Canceled"
         : errorMessage;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       toast.error(toastMessage, {
         className:
-          '!text-[#DE613F] !bg-[black] border border-[#DE613f] !rounded-lg',
+          "!text-[#DE613F] !bg-[black] border border-[#DE613f] !rounded-lg",
       });
       setIsAdding(false);
     }
@@ -157,14 +165,14 @@ const BuzzFormWrap = ({ btcConnector, quotePin }: Iprops) => {
   const handleRemoveImage = (index: number) => {
     setFilesPreview(filesPreview.filter((_, i) => i !== index));
     buzzFormHandle.setValue(
-      'images',
-      removeFileFromList(buzzFormHandle.watch('images'), index)
+      "images",
+      removeFileFromList(buzzFormHandle.watch("images"), index)
     );
     // remove item from  files object with index
   };
 
   return (
-    <LoadingOverlay active={isAdding} spinner text='Creating Buzz...'>
+    <LoadingOverlay active={isAdding} spinner text="Creating Buzz...">
       <BuzzForm
         onCreateSubmit={onCreateSubmit}
         handleRemoveImage={handleRemoveImage}

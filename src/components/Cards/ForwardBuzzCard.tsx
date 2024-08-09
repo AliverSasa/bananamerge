@@ -47,7 +47,7 @@ const ForwardBuzzCard = ({ buzzItem }: IProps) => {
     queryFn: () =>
       btcConnector?.getUser({
         network: environment.network,
-        currentAddress: buzzItem!.creator,
+        currentAddress: buzzItem!.address,
       }),
   });
   const metaid = currentUserInfoData?.data?.metaid;
@@ -281,7 +281,7 @@ const ForwardBuzzCard = ({ buzzItem }: IProps) => {
                   </div>
                 </div>
               ) : (
-                <CustomAvatar userInfo={currentUserInfoData.data} />
+                <CustomAvatar userInfo={currentUserInfoData.data} borderRadius={'50%'}/>
               )}
               <div className='flex flex-col md:text-md text-sm'>
                 <div className='text-slate-200'>

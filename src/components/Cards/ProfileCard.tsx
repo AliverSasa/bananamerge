@@ -284,7 +284,8 @@ const ProfileCard = ({ address, isDropdown = false }: Iprops) => {
   }
   return (
     <div className='border w-full border-white rounded-xl relative pt-[100px] md:pt-[170px]'>
-      <img src='/profile-bar.png' className='absolute top-0' />
+      {/* <img src='/profile-bar.png' className='absolute top-0' /> */}
+      <img src='/banana_logo.png' className='absolute top-0 left-[45%] w-32 h-32' />
       <div className='flex justify-between p-6'>
         <div className='flex flex-col gap-2 items-start '>
           <div className='md:block hidden'>
@@ -294,7 +295,7 @@ const ProfileCard = ({ address, isDropdown = false }: Iprops) => {
             <CustomAvatar userInfo={profileUserData?.data} size='66px' />
           </div>
           <div className='font-bold font-mono text-[12px] md:text-[24px] '>
-            {profileUserData?.data?.name ?? `MetaID-User-${metaidPrefix}`}
+            {profileUserData?.data?.name ?profileUserData?.data?.name :"metaid-" + profileUserData?.data?.metaid.slice(0, 4)}
           </div>
           <div className='flex gap-2 text-[12px] md:text-[14px] '>
             <div className='text-main'>{`MetaID:  ${metaidPrefix}`}</div>

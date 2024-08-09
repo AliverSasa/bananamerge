@@ -41,7 +41,7 @@ const Buzz = () => {
             <BuzzCard buzzItem={buzzDetailData} />
           )}
         </div>
-        <div className='my-6'>{`Comment (${commentsNum})`}</div>
+        {/* <div className='my-6'>{`Comment (${commentsNum})`}</div>
         <div
           className={cls({
             'border border-white rounded-md p-4': commentsNum > 0,
@@ -60,7 +60,7 @@ const Buzz = () => {
               </div>
             );
           })}
-        </div>
+        </div> */}
       </div>
     </>
   );

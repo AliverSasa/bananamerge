@@ -19,6 +19,7 @@ import { IBtcConnector } from '@metaid/metaid';
 import AboutModal from '../Modals/AboutModal';
 import NavabarMobileMenu from './NavabarMobileMenu';
 import NewBuzzModal from '../Modals/NewBuzzModal';
+import MusicPlayer from "./MusicPlayer";
 
 type IProps = {
   onWalletConnectStart: () => Promise<void>;
@@ -35,7 +36,7 @@ const Navbar = ({ onWalletConnectStart, onLogout, btcConnector }: IProps) => {
   const onBuzzStart = async () => {
     await checkMetaletInstalled();
     await checkMetaletConnected(connected);
-    await checkUserNameExisted(userInfo?.name ?? '');
+    // await checkUserNameExisted(userInfo?.name ?? '');
 
     const doc_modal = document.getElementById(
       'new_buzz_modal'
@@ -54,12 +55,26 @@ const Navbar = ({ onWalletConnectStart, onLogout, btcConnector }: IProps) => {
     <>
       <AboutModal />
 
-      <div className='z-10 navbar py-3 px-0 bg-main absolute top-0'>
-        <div className='container flex justify-between'>
-          <Link to={'/'} className='md:block hidden'>
-            <img src='/logo_navbar.png' className='w-[100px] h-[26px]' />
-          </Link>
-          <NavabarMobileMenu />
+      <div className="z-10 navbar py-3 px-0 bg-main absolute top-0">
+        <div className="container flex justify-between">
+          <div className="flex items-center gap-2">
+            {/* <Link to={"/"} className="md:block hidden"> */}
+            <Link to={"/"}>
+              {/* <img src='/logo_navbar.png' className='w-[100px] h-[26px]' /> */}
+              <div className="flex items-center">
+                <img src="/banana_logo.png" width={50} height={70} />
+                <span className="title-font">Banana3</span>
+              </div>
+            </Link>
+            <div>
+                <MusicPlayer />
+              </div>
+          </div>
+          {/* <NavabarMobileMenu /> */}
+
+
+
+
 
           <div className='flex items-center gap-2'>
             <div className='gap-4 hidden md:flex'>
@@ -127,7 +142,7 @@ const Navbar = ({ onWalletConnectStart, onLogout, btcConnector }: IProps) => {
                   role='button'
                   className='cursor-pointer md:block hidden'
                 >
-                  <CustomAvatar userInfo={userInfo!} />
+                  <CustomAvatar userInfo={userInfo!} borderRadius={'50%'}/>
                 </div>
                 <ul
                   tabIndex={0}
