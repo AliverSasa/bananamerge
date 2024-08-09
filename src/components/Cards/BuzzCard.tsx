@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import FollowButton from "../Buttons/FollowButton";
-import { Heart, Link as LucideLink, MessageCircle } from "lucide-react";
-import { Send } from "lucide-react";
+import { Heart, Link as LucideLink } from "lucide-react";
+// import { Send } from "lucide-react";
 import { isEmpty, isNil } from "ramda";
 import cls from "classnames";
 import {
@@ -15,14 +15,12 @@ import {
   connectedAtom,
   globalFeeRateAtom,
   myFollowingListAtom,
-  userInfoAtom,
 } from "../../store/user";
 import { useAtom, useAtomValue } from "jotai";
 import CustomAvatar from "../Public/CustomAvatar";
 // import { sleep } from '../../utils/time';
 import { toast } from "react-toastify";
 import {
-  fetchCurrentBuzzComments,
   fetchCurrentBuzzLikes,
   fetchFollowDetailPin,
   fetchFollowingList,
@@ -31,7 +29,6 @@ import {
 import {
   checkMetaletConnected,
   checkMetaletInstalled,
-  checkUserNameExisted,
 } from "../../utils/wallet";
 import { environment } from "../../utils/environments";
 import FollowButton from "../Buttons/FollowButton";
@@ -64,7 +61,7 @@ const BuzzCard = ({
   const connected = useAtomValue(connectedAtom);
   const btcConnector = useAtomValue(btcConnectorAtom);
   const globalFeeRate = useAtomValue(globalFeeRateAtom);
-  const userInfo = useAtomValue(userInfoAtom);
+  // const userInfo = useAtomValue(userInfoAtom);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -112,11 +109,11 @@ const BuzzCard = ({
       }),
   });
 
-  const commentData = useQuery({
-    enabled: !isNil(buzzItem?.id),
-    queryKey: ["comment-detail", buzzItem!.id],
-    queryFn: () => fetchCurrentBuzzComments({ pinId: buzzItem!.id }),
-  });
+  // const commentData = useQuery({
+  //   enabled: !isNil(buzzItem?.id),
+  //   queryKey: ["comment-detail", buzzItem!.id],
+  //   queryFn: () => fetchCurrentBuzzComments({ pinId: buzzItem!.id }),
+  // });
 
   const isLikeByCurrentUser = (currentLikeData ?? [])?.find(
     (d) => d?.pinAddress === btcConnector?.address
@@ -456,8 +453,8 @@ const BuzzCard = ({
         });
         if (!isNil(unfollowRes?.revealTxIds[0])) {
           queryClient.invalidateQueries({ queryKey: ["buzzes"] });
-          setMyFollowingList((d) => {
-            return d.filter((i) => i !== metaid);
+          setMyFollowingList((d: string[]) => {
+            return d.filter((i:any) => i !== metaid);
           });
           // await sleep(5000);
           toast.success(

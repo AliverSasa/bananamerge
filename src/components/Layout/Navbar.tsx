@@ -11,13 +11,12 @@ import {
 import {
   checkMetaletConnected,
   checkMetaletInstalled,
-  checkUserNameExisted,
 } from '../../utils/wallet';
 import CustomAvatar from '../Public/CustomAvatar';
 
 import { IBtcConnector } from '@metaid/metaid';
 import AboutModal from '../Modals/AboutModal';
-import NavabarMobileMenu from './NavabarMobileMenu';
+// import NavabarMobileMenu from './NavabarMobileMenu';
 import NewBuzzModal from '../Modals/NewBuzzModal';
 import MusicPlayer from "./MusicPlayer";
 
@@ -55,7 +54,7 @@ const Navbar = ({ onWalletConnectStart, onLogout, btcConnector }: IProps) => {
     <>
       <AboutModal />
 
-      <div className="z-10 navbar py-3 px-0 bg-main absolute top-0">
+      <div className="z-[100] navbar py-3 px-0 bg-main fixed top-0">
         <div className="container flex justify-between">
           <div className="flex items-center gap-2">
             {/* <Link to={"/"} className="md:block hidden"> */}

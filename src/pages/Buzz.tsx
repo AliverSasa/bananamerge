@@ -4,16 +4,16 @@ import { fetchCurrentBuzzComments, getPinDetailByPid } from '../api/buzz';
 import BackButton from '../components/Buttons/BackButton';
 import BuzzCard from '../components/Cards/BuzzCard';
 
-import CommentCard from '../components/Cards/CommentCard';
-import { useAtomValue } from 'jotai';
-import { btcConnectorAtom } from '../store/user';
+// import CommentCard from '../components/Cards/CommentCard';
+// import { useAtomValue } from 'jotai';
+// import { btcConnectorAtom } from '../store/user';
 import { isNil } from 'ramda';
-import cls from 'classnames';
+// import cls from 'classnames';
 
 const Buzz = () => {
   const { id: tempId } = useParams();
   const id = tempId ?? '';
-  const btcConnector = useAtomValue(btcConnectorAtom);
+  // const btcConnector = useAtomValue(btcConnectorAtom);
 
   const { isLoading, data: buzzDetailData } = useQuery({
     queryKey: ['buzzDetail', id],
@@ -27,7 +27,7 @@ const Buzz = () => {
   });
 
   console.log('commentData', commentData);
-  const commentsNum = (commentData?.data ?? []).length;
+  // const commentsNum = (commentData?.data ?? []).length;
   return (
     <>
       <div>

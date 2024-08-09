@@ -1,4 +1,4 @@
-import { BookCheck } from "lucide-react";
+// import { BookCheck } from "lucide-react";
 // about modal
 const AboutModal = () => {
   const onCloseAlertModal = () => {
