@@ -65,7 +65,7 @@ const BuzzCard = ({
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  // console.log('buzzitem', buzzItem);
+  console.log('buzzitem', buzzItem);
   const isFromBtc = buzzItem?.chainName === "btc";
   let summary = buzzItem!.contentSummary;
   const isSummaryJson = summary.startsWith("{") && summary.endsWith("}");
@@ -551,7 +551,6 @@ const BuzzCard = ({
   if (isNil(buzzItem)) {
     return <div>can't fetch this buzz</div>;
   }
-
   return (
     <>
       <div className={cls("w-full flex")} ref={innerRef}>
@@ -569,6 +568,7 @@ const BuzzCard = ({
                 userInfo={currentUserInfoData.data}
                 onProfileDetail={onProfileDetail}
                 size={"36px"}
+                isHasWuKong={buzzItem.hasWukong}
               />
               </div>
             )}

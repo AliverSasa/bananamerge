@@ -12,7 +12,7 @@ import {
   checkMetaletConnected,
   checkMetaletInstalled,
 } from '../../utils/wallet';
-import CustomAvatar from '../Public/CustomAvatar';
+import RightCustomAvatar from '../Public/RightCustomAvatar';
 
 import { IBtcConnector } from '@metaid/metaid';
 import AboutModal from '../Modals/AboutModal';
@@ -134,14 +134,14 @@ const Navbar = ({ onWalletConnectStart, onLogout, btcConnector }: IProps) => {
                   role='button'
                   className='cursor-pointer md:hidden block'
                 >
-                  <CustomAvatar userInfo={userInfo!} size='36px' />
+                  <RightCustomAvatar userInfo={userInfo!} size='36px' />
                 </div>
                 <div
                   tabIndex={0}
                   role='button'
                   className='cursor-pointer md:block hidden'
                 >
-                  <CustomAvatar userInfo={userInfo!} borderRadius={'50%'}/>
+                  <RightCustomAvatar userInfo={userInfo!} borderRadius={'50%'}/>
                 </div>
                 <ul
                   tabIndex={0}

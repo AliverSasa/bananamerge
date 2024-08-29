@@ -17,6 +17,7 @@ export type UserInfo = {
   soulbondToken: string;
   unconfirmed: string;
   metaid: string;
+  isHasWuKong?: boolean;
 };
 
 export const connectedAtom = atomWithStorage<boolean>('connectedAtom', false);

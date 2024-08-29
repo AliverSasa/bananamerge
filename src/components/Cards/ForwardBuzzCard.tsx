@@ -19,6 +19,7 @@ type IProps = {
 };
 
 const ForwardBuzzCard = ({ buzzItem }: IProps) => {
+
   const hideActionButtons = true;
 
   const btcConnector = useAtomValue(btcConnectorAtom);
@@ -281,7 +282,7 @@ const ForwardBuzzCard = ({ buzzItem }: IProps) => {
                   </div>
                 </div>
               ) : (
-                <CustomAvatar userInfo={currentUserInfoData.data} borderRadius={'50%'}/>
+                <CustomAvatar userInfo={currentUserInfoData.data} borderRadius={'50%'} />
               )}
               <div className='flex flex-col md:text-md text-sm'>
                 <div className='text-slate-200'>

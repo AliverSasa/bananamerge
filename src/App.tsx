@@ -106,14 +106,40 @@ function App() {
       network: environment.network,
     });
     console.log("user now", resUser);
-
-    setUserInfo(resUser);
+    const isWokongHolder = await holdersApi(_wallet.address);
+    let updateObj = {}
+    if(isWokongHolder){
+      updateObj = {
+        ...resUser,
+        isHasWuKong: true,
+      }
+    }else{
+      updateObj = {
+        ...resUser,
+        isHasWuKong: false,
+      }
+    }
+    setUserInfo(updateObj);
     setConnected(true);
     // setBuzzEntity(await _btcConnector.use('buzz'));
     const options = { connector: _btcConnector };
     const _buzzEntity = await loadBtc(bananaSchema, options);
     setBuzzEntity(_buzzEntity);
     console.log("your btc address: ", _btcConnector.address);
+  };
+  const holdersApi = async (address:string) => {
+    const url = `https://www.metalet.space/wallet-api/v3/mrc20/address/balance-info?net=livenet&address=${address}&tickId=5896654ce91180f1993274d905020081ad7e6a5aa053659d5c50992482fd0f97i0`;
+    try {
+      const response = await fetch(url);
+      const responseData = await response.json();
+      if(responseData.data !== null){
+        return true
+      }else{
+        return false
+      }
+    } catch (error) {
+      return false
+    }
   };
 
   const getBuzzEntity = async () => {
@@ -130,6 +156,7 @@ function App() {
     getBuzzEntity();
   }, []);
   const handleBeforeUnload = async () => {
+    console.log(walletParams);
     if (!isNil(walletParams)) {
       const _wallet = MetaletWalletForBtc.restore({
         ...walletParams,
@@ -141,7 +168,22 @@ function App() {
         network: environment.network,
       });
       setBtcConnector(_btcConnector);
-      setUserInfo(_btcConnector.user);
+      const currentUser = _btcConnector.user;
+      let updatedUser = {}
+      const isWukongHolder = await holdersApi(_wallet.address);
+      if(isWukongHolder){
+        updatedUser = {
+          ...currentUser,
+          isHasWuKong: true,
+        }
+      }else{
+        updatedUser = {
+          ...currentUser,
+          isHasWuKong: false,
+        }
+      }
+      // setUserInfo(_btcConnector.user);
+      setUserInfo(updatedUser);
       // setConnected(true);
       // console.log('refetch user', _btcConnector.user);
     }

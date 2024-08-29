@@ -7,7 +7,6 @@ type Iprops = {
   onProfileDetail?: (address: string) => void;
   size?: string;
   borderRadius?: string;
-  isHasWuKong:boolean
 };
 
 const CustomAvatar = ({
@@ -15,9 +14,7 @@ const CustomAvatar = ({
   onProfileDetail,
   size = "48px",
   borderRadius,
-  isHasWuKong
 }: Iprops) => {
-  console.log(isHasWuKong)
   const hasName = !isNil(userInfo?.name) && !isEmpty(userInfo?.name);
   const hasAvatar = !isNil(userInfo?.avatar) && !isEmpty(userInfo?.avatar);
   const userAlt = hasName
@@ -33,7 +30,7 @@ const CustomAvatar = ({
     >
       {hasAvatar ? (
         <img
-          src={isHasWuKong?'https://man.metaid.io/content/69e3011f06160343a94480f4507f5bb6338edbcacd59d9decb61085e8916f6d1i0':src}
+        src={userInfo?.isHasWuKong?'https://man.metaid.io/content/69e3011f06160343a94480f4507f5bb6338edbcacd59d9decb61085e8916f6d1i0':src}
           alt="user avatar"
           className="self-start cursor-pointer"
           style={{
@@ -43,7 +40,7 @@ const CustomAvatar = ({
             borderRadius: borderRadius,
           }}
         />
-      ) : ( isHasWuKong?(
+      ) : ( userInfo?.isHasWuKong?(
         <img
         src={'https://man.metaid.io/content/69e3011f06160343a94480f4507f5bb6338edbcacd59d9decb61085e8916f6d1i0'}
           alt="user avatar"
