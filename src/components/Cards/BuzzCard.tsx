@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import FollowButton from "../Buttons/FollowButton";
-import { Heart, Link as LucideLink } from "lucide-react";
+import { DiscAlbum, Heart, Link as LucideLink } from "lucide-react";
 // import { Send } from "lucide-react";
 import { isEmpty, isNil } from "ramda";
 import cls from "classnames";
@@ -65,7 +65,7 @@ const BuzzCard = ({
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  console.log('buzzitem', buzzItem);
+  console.log("buzzitem", buzzItem);
   const isFromBtc = buzzItem?.chainName === "btc";
   let summary = buzzItem!.contentSummary;
   const isSummaryJson = summary.startsWith("{") && summary.endsWith("}");
@@ -313,23 +313,67 @@ const BuzzCard = ({
   };
 
   const renderTranslteResults = (results: ResultArray) => {
-    return (
-      <div className="flex flex-col gap-2.5">
-        {results.map((result, index) => (
-          <span key={index} className="break-all">
-            <div>{result.dst.replace("<br>", "")}</div>
+    const textStyle = buzzItem?.hasBanana
+      ? "text-lg" // 大字体和颜色变化
+      : "text-base"; // 正常字体和默认颜色
 
-            {/* <br /> */}
-          </span>
-        ))}
+    const bananaStyle = buzzItem?.hasBanana
+      ? "text-4xl" // 大字体适用于香蕉表情
+      : "text-base"; // 正常字体适用于香蕉表情
+
+    const bananaPattern = /<br>🍌🍌🍌$/;
+    return (
+      <div className={`flex flex-col gap-2.5 ${textStyle}`}>
+        {results.map((result, index) => {
+          const hasBananas = bananaPattern.test(result.dst);
+          const contentWithoutBananas = hasBananas
+            ? result.dst.replace(bananaPattern, "")
+            : result.dst;
+          const bananaContent = hasBananas
+            ? '<span class="' + bananaStyle + '">🍌🍌🍌</span>'
+            : "";
+
+          return (
+            <span key={index} className="break-all">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html:
+                    handleSpecial(detectUrl(contentWithoutBananas)) +
+                    bananaContent,
+                }}
+              />
+            </span>
+          );
+        })}
       </div>
     );
   };
 
   const renderBasicSummary = (summary: string) => {
+    console.log(summary);
+    const textStyle = buzzItem?.hasBanana
+      ? "text-main" // 大字体和颜色变化
+      : "text-base"; // 正常字体和默认颜色
+
+    const bananaStyle = buzzItem?.hasBanana
+      ? "text-7xl" // 大字体适用于香蕉表情
+      : "text-base"; // 正常字体适用于香蕉表情
+
+    const bananaPattern = /<br>🍌🍌🍌$/;
+    const hasBananas = bananaPattern.test(summary);
+
+    const contentWithoutBananas = hasBananas
+      ? summary.replace(bananaPattern, "")
+      : summary;
+
+    const bananaContent = hasBananas
+      ? '<span class="' + bananaStyle + '">🍌🍌🍌</span>'
+      : "";
+
     return (
-      <div className="flex flex-col gap-2.5">
-        {(summary ?? "").split("\n").map((line, index) => (
+      // <div className="flex flex-col gap-2.5">
+       <div className={`flex flex-col gap-2.5 ${textStyle}`}>
+        {(contentWithoutBananas ?? "").split("\n").map((line, index) => (
           <span key={index} className="break-all">
             <div
               dangerouslySetInnerHTML={{
@@ -338,6 +382,12 @@ const BuzzCard = ({
             />
           </span>
         ))}
+        {bananaContent && (
+          <span
+            className="break-all"
+            dangerouslySetInnerHTML={{ __html: bananaContent }}
+          />
+        )}
       </div>
     );
   };
@@ -454,7 +504,7 @@ const BuzzCard = ({
         if (!isNil(unfollowRes?.revealTxIds[0])) {
           queryClient.invalidateQueries({ queryKey: ["buzzes"] });
           setMyFollowingList((d: string[]) => {
-            return d.filter((i:any) => i !== metaid);
+            return d.filter((i: any) => i !== metaid);
           });
           // await sleep(5000);
           toast.success(
@@ -564,12 +614,12 @@ const BuzzCard = ({
               </div>
             ) : (
               <div className="absolute pos flex items-center justify-center">
-              <CustomAvatar
-                userInfo={currentUserInfoData.data}
-                onProfileDetail={onProfileDetail}
-                size={"36px"}
-                isHasWuKong={buzzItem.hasWukong}
-              />
+                <CustomAvatar
+                  userInfo={currentUserInfoData.data}
+                  onProfileDetail={onProfileDetail}
+                  size={"36px"}
+                  isHasWuKong={buzzItem.hasWukong}
+                />
               </div>
             )}
           </div>
@@ -639,7 +689,7 @@ const BuzzCard = ({
               {showTranslateResult
                 ? renderTranslteResults(translateResult)
                 : renderSummary(summary, !isNil(onBuzzDetail))}
-              <div className="text-main mb-4 cursor-pointer">
+              <div className="text-main mb-4 cursor-pointer}">
                 {translateMutate.isPending ? (
                   <div className="loading loading-dots"></div>
                 ) : (
@@ -674,6 +724,14 @@ const BuzzCard = ({
                 ) : (
                   <ForwardBuzzCard buzzItem={quoteDetailData} />
                 )}
+              </div>
+            )}
+
+            {buzzItem?.hasBanana && (
+              <div className="flex mb-4">
+                <div className="inline box-border border animate-border-flow border-4 p-3 text-[#000] font-bold ml-auto bg-main text-xl">
+                  From BigBanana‘s Holder
+                </div>
               </div>
             )}
 

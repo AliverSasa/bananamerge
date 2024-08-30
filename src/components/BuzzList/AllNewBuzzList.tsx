@@ -75,13 +75,17 @@ const AllNewBuzzList = ({
           const processedBuzzes = await Promise.all(
             data.pages.flatMap((pins: Pin[] | null) =>
               (pins ?? []).map(async (pin) => {
-                const url = `https://www.metalet.space/wallet-api/v3/mrc20/address/balance-info?net=livenet&address=${pin.address}&tickId=5896654ce91180f1993274d905020081ad7e6a5aa053659d5c50992482fd0f97i0`;
+                const url1 = `https://www.metalet.space/wallet-api/v3/mrc20/address/balance-info?net=livenet&address=${pin.address}&tickId=cf6a83ce5a63d0acb4ab58736ce4221f0a0ea01669a152b0b5181936210520d6i0`;
+                const url2 = `https://www.metalet.space/wallet-api/v3/mrc20/address/balance-info?net=livenet&address=${pin.address}&tickId=5896654ce91180f1993274d905020081ad7e6a5aa053659d5c50992482fd0f97i0`;
                 try {
-                  const response = await fetch(url);
-                  const responseData = await response.json();
+                  const response1 = await fetch(url1);
+                  const response2 = await fetch(url2);
+                  const responseData1 = await response1.json();
+                  const responseData2 = await response2.json();
                   const updatedPin = {
                     ...pin,
-                    hasWukong: responseData.data !== null,
+                    hasWukong: responseData2.data !== null,
+                    hasBanana: responseData1.data !== null,
                   };
                     return (
                     <BuzzCard
