@@ -1,23 +1,24 @@
-import { useAtom, useAtomValue } from 'jotai';
-import { PencilLine } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useAtom, useAtomValue } from "jotai";
+import { PencilLine } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import {
   connectedAtom,
   globalFeeRateAtom,
   userInfoAtom,
-} from '../../store/user';
+} from "../../store/user";
 
 import {
   checkMetaletConnected,
   checkMetaletInstalled,
-} from '../../utils/wallet';
-import RightCustomAvatar from '../Public/RightCustomAvatar';
+} from "../../utils/wallet";
+import RightCustomAvatar from "../Public/RightCustomAvatar";
 
-import { IBtcConnector } from '@metaid/metaid';
-import AboutModal from '../Modals/AboutModal';
+import { IBtcConnector } from "@metaid/metaid";
+import AboutModal from "../Modals/AboutModal";
+import PushTicketModal from "../Modals/PushTicketModal";
 // import NavabarMobileMenu from './NavabarMobileMenu';
-import NewBuzzModal from '../Modals/NewBuzzModal';
+import NewBuzzModal from "../Modals/NewBuzzModal";
 import MusicPlayer from "./MusicPlayer";
 
 type IProps = {
@@ -38,14 +39,14 @@ const Navbar = ({ onWalletConnectStart, onLogout, btcConnector }: IProps) => {
     // await checkUserNameExisted(userInfo?.name ?? '');
 
     const doc_modal = document.getElementById(
-      'new_buzz_modal'
+      "new_buzz_modal"
     ) as HTMLDialogElement;
     doc_modal.showModal();
   };
 
   const onEditProfileStart = async () => {
     const doc_modal = document.getElementById(
-      'edit_metaid_modal'
+      "edit_metaid_modal"
     ) as HTMLDialogElement;
     doc_modal.showModal();
   };
@@ -53,9 +54,23 @@ const Navbar = ({ onWalletConnectStart, onLogout, btcConnector }: IProps) => {
   return (
     <>
       <AboutModal />
+      <PushTicketModal />
 
       <div className="z-[100] navbar py-3 px-0 bg-main fixed top-0">
-        <div className="container flex justify-between">
+        <div className="container flex justify-between relative">
+          <div
+            className="absolute -right-[180px] top-[48%] -translate-y-1/2 flex items-center cursor-pointer"
+            onClick={() => {
+              const doc_modal = document.getElementById(
+                "pushticket_modal"
+              ) as HTMLDialogElement;
+              doc_modal.showModal();
+            }}
+          >
+            <img src="/ticket.png" className="w-12 h-12 rounded-[50%]" />
+            <div className="ml-2 text-lime-900 font-bold hover:underline hover:text-lime-700 hidden md:block">Trade $BigBanana</div>
+          </div>
+
           <div className="flex items-center gap-2">
             {/* <Link to={"/"} className="md:block hidden"> */}
             <Link to={"/"}>
@@ -66,52 +81,48 @@ const Navbar = ({ onWalletConnectStart, onLogout, btcConnector }: IProps) => {
               </div>
             </Link>
             <div>
-                <MusicPlayer />
-              </div>
+              <MusicPlayer />
+            </div>
           </div>
           {/* <NavabarMobileMenu /> */}
 
-
-
-
-
-          <div className='flex items-center gap-2'>
-            <div className='gap-4 hidden md:flex'>
+          <div className="flex items-center gap-2">
+            <div className="gap-4 hidden md:flex">
               <a
-                href='https://docs.metaid.io/'
-                className='text-lime-900 font-bold hover:underline hover:text-lime-700'
-                target='_blank'
+                href="https://docs.metaid.io/"
+                className="text-lime-900 font-bold hover:underline hover:text-lime-700"
+                target="_blank"
               >
                 Docs
               </a>
               <button
-                className='text-lime-900 font-bold hover:underline hover:text-lime-700'
+                className="text-lime-900 font-bold hover:underline hover:text-lime-700"
                 onClick={() => {
                   const doc_modal = document.getElementById(
-                    'about_modal'
+                    "about_modal"
                   ) as HTMLDialogElement;
                   doc_modal.showModal();
                 }}
               >
                 About
               </button>
-              <div className='border-r border border-[#1D2F2F]/50 mr-2'></div>
+              <div className="border-r border border-[#1D2F2F]/50 mr-2"></div>
             </div>
 
             <img
-              src='/charging-pile.png'
-              className='w-[30px] h-[35px] hidden md:block'
+              src="/charging-pile.png"
+              className="w-[30px] h-[35px] hidden md:block"
             />
             <input
-              inputMode='numeric'
-              type='number'
+              inputMode="numeric"
+              type="number"
               min={0}
-              max={'100000'}
+              max={"100000"}
               style={{
-                appearance: 'textfield',
+                appearance: "textfield",
               }}
               aria-hidden
-              className='w-[65px] h-[32px] input input-xs  bg-[black]  shadow-inner !pr-0 border-none focus:border-main text-main focus:outline-none  hidden md:block'
+              className="w-[65px] h-[32px] input input-xs  bg-[black]  shadow-inner !pr-0 border-none focus:border-main text-main focus:outline-none  hidden md:block"
               step={1}
               value={globalFeeRate}
               onChange={(e) => {
@@ -119,67 +130,70 @@ const Navbar = ({ onWalletConnectStart, onLogout, btcConnector }: IProps) => {
                 setGlobalFeeRate(v);
               }}
             />
-            <div className='text-[#1D2F2F] hidden md:block'>sat/vB</div>
+            <div className="text-[#1D2F2F] hidden md:block">sat/vB</div>
 
             <PencilLine
-              className='border rounded-full text-main bg-[black] p-2 cursor-pointer ml-2 w-9 h-9 md:w-12 md:h-12'
+              className="border rounded-full text-main bg-[black] p-2 cursor-pointer ml-2 w-9 h-9 md:w-12 md:h-12"
               // size={45}
               onClick={onBuzzStart}
             />
 
             {connected ? (
-              <div className='dropdown dropdown-hover'>
+              <div className="dropdown dropdown-hover">
                 <div
                   tabIndex={0}
-                  role='button'
-                  className='cursor-pointer md:hidden block'
+                  role="button"
+                  className="cursor-pointer md:hidden block"
                 >
-                  <RightCustomAvatar userInfo={userInfo!} size='36px' />
+                  <RightCustomAvatar userInfo={userInfo!} size="36px" />
                 </div>
                 <div
                   tabIndex={0}
-                  role='button'
-                  className='cursor-pointer md:block hidden'
+                  role="button"
+                  className="cursor-pointer md:block hidden"
                 >
-                  <RightCustomAvatar userInfo={userInfo!} borderRadius={'50%'}/>
+                  <RightCustomAvatar
+                    userInfo={userInfo!}
+                    borderRadius={"50%"}
+                  />
                 </div>
                 <ul
                   tabIndex={0}
-                  className='dropdown-content z-[1] menu px-4 py-4 gap-3 shadow bg-main rounded-box w-[170px] border border-[#131519] right-0'
+                  className="dropdown-content z-[1] menu px-4 py-4 gap-3 shadow bg-main rounded-box w-[170px] border border-[#131519] right-0"
                   style={{
-                    borderRadius: '12px',
-                    boxShadow: '0px 4px 10px 0px rgba(169, 211, 18, 0.5)',
+                    borderRadius: "12px",
+                    boxShadow: "0px 4px 10px 0px rgba(169, 211, 18, 0.5)",
                   }}
                 >
                   <li
-                    className='hover:bg-[rgba(219, 243, 136, 0.5)] rounded-box relative'
+                    className="hover:bg-[rgba(219, 243, 136, 0.5)] rounded-box relative"
                     onClick={onEditProfileStart}
                   >
                     <img
-                      src='/profile-icon.png'
+                      src="/profile-icon.png"
                       width={55}
                       height={55}
-                      className='absolute left-0 top-0'
+                      className="absolute left-0 top-0"
                     />
                     <a
-                      className='text-[#1D2F2F] text-[14px]'
-                      style={{ textIndent: '2.2em' }}
+                      className="text-[#1D2F2F] text-[14px]"
+                      style={{ textIndent: "2.2em" }}
                     >{`Edit Profile`}</a>
                   </li>
-                  <div className='border border-[#1D2F2F]/50 w-[80%] mx-auto'></div>
+                  <div className="border border-[#1D2F2F]/50 w-[80%] mx-auto"></div>
                   <li
-                    className='hover:bg-[rgba(219, 243, 136, 0.5)] rounded-box relative'
+                    className="hover:bg-[rgba(219, 243, 136, 0.5)] rounded-box relative"
                     onClick={onLogout}
                   >
                     <img
-                      src='/logout-icon.png'
+                      src="/logout-icon.png"
                       width={55}
                       height={55}
-                      className='absolute left-0 top-0'
+                      className="absolute left-0 top-0"
                     />
                     <a
-                      className='text-[#1D2F2F] text-[14px]'
-                      style={{ textIndent: '2.5em' }}
+                      className="text-[#1D2F2F] text-[14px]"
+                      style={{ textIndent: "2.5em" }}
                     >
                       Disconnect
                     </a>
@@ -188,7 +202,7 @@ const Navbar = ({ onWalletConnectStart, onLogout, btcConnector }: IProps) => {
               </div>
             ) : (
               <div
-                className='btn-sm w-[120px] text-[12px] md:text-[14px] md:btn-md md:w-[180px] btn btn-outline hover:bg-[black] hover:text-main rounded-full font-medium'
+                className="btn-sm w-[120px] text-[12px] md:text-[14px] md:btn-md md:w-[180px] btn btn-outline hover:bg-[black] hover:text-main rounded-full font-medium"
                 onClick={onWalletConnectStart}
               >
                 Connect Wallet

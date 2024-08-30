@@ -7,7 +7,7 @@ type Iprops = {
   onProfileDetail?: (address: string) => void;
   size?: string;
   borderRadius?: string;
-  isHasWuKong:boolean
+  isHasWuKong?:boolean
 };
 
 const CustomAvatar = ({
@@ -17,7 +17,6 @@ const CustomAvatar = ({
   borderRadius,
   isHasWuKong
 }: Iprops) => {
-  console.log(isHasWuKong)
   const hasName = !isNil(userInfo?.name) && !isEmpty(userInfo?.name);
   const hasAvatar = !isNil(userInfo?.avatar) && !isEmpty(userInfo?.avatar);
   const userAlt = hasName

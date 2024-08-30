@@ -119,6 +119,7 @@ function App() {
         isHasWuKong: false,
       }
     }
+    // @ts-ignore
     setUserInfo(updateObj);
     setConnected(true);
     // setBuzzEntity(await _btcConnector.use('buzz'));
@@ -183,6 +184,7 @@ function App() {
         }
       }
       // setUserInfo(_btcConnector.user);
+      // @ts-ignore
       setUserInfo(updatedUser);
       // setConnected(true);
       // console.log('refetch user', _btcConnector.user);

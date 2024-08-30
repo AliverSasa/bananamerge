@@ -45,6 +45,7 @@ export type Pin = {
   popLv: number;
   chainName: string;
   dataValue: number;
+  hasWukong?:boolean
 };
 
 // export type Pin = {
