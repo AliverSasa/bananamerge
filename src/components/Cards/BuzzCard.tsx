@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import FollowButton from "../Buttons/FollowButton";
-import { DiscAlbum, Heart, Link as LucideLink } from "lucide-react";
+import { Heart, Link as LucideLink } from "lucide-react";
 // import { Send } from "lucide-react";
 import { isEmpty, isNil } from "ramda";
 import cls from "classnames";
@@ -729,7 +729,7 @@ const BuzzCard = ({
 
             {buzzItem?.hasBanana && (
               <div className="flex mb-4">
-                <div className="inline box-border border animate-border-flow border-4 p-3 text-[#000] font-bold ml-auto bg-main text-xl">
+                <div className="inline box-border border animate-border-flow border-4 p-3 text-[#000] font-bold ml-auto bg-main text-xl rounded-lg shadow-[0_0_20px_rgba(72,170,173,0.5)]">
                   From BigBanana‘s Holder
                 </div>
               </div>
