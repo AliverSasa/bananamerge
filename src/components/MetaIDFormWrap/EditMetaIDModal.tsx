@@ -1,11 +1,12 @@
-import { IBtcConnector } from '@metaid/metaid';
+import { IBtcConnector,IMvcConnector } from '@metaid/metaid';
 import EditMetaIDFormWrap from './EditMetaIDFormWrap';
 
 type Iprops = {
   btcConnector: IBtcConnector;
+  mvcConnector: IMvcConnector;
 };
 
-const EditMetaIDModal = ({ btcConnector }: Iprops) => {
+const EditMetaIDModal = ({ btcConnector,mvcConnector }: Iprops) => {
   return (
     <dialog id='edit_metaid_modal' className='modal'>
       <div className='modal-box bg-[#191C20] py-5 !z-20 w-[90%] lg:w-[50%]'>
@@ -18,7 +19,7 @@ const EditMetaIDModal = ({ btcConnector }: Iprops) => {
         <h3 className='font-medium text-white text-[16px] text-center'>
           MetaID Profile
         </h3>
-        <EditMetaIDFormWrap btcConnector={btcConnector!} />
+        <EditMetaIDFormWrap btcConnector={btcConnector!} mvcConnector={mvcConnector!}/>
       </div>
       <form method='dialog' className='modal-backdrop'>
         <button>close</button>

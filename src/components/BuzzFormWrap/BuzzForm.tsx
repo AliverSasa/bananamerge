@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import { FileEdit } from "lucide-react";
-import { Image } from 'lucide-react';
-import { Controller, SubmitHandler, UseFormReturn } from 'react-hook-form';
-import cls from 'classnames';
-import { IsEncrypt, mergeFileLists } from '../../utils/file';
-import { isNil } from 'ramda';
-import { Pin } from '../../api/request';
-import ForwardBuzzCard from '../Cards/ForwardBuzzCard';
-import CustomFeerate from '../Public/CustomFeerate';
+import { Image } from "lucide-react";
+import { Controller, SubmitHandler, UseFormReturn } from "react-hook-form";
+import cls from "classnames";
+import { IsEncrypt, mergeFileLists } from "../../utils/file";
+import { isNil } from "ramda";
+import { Pin } from "../../api/request";
+import ForwardBuzzCard from "../Cards/ForwardBuzzCard";
+import CustomFeerate from "../Public/CustomFeerate";
+import { currentChainAtom } from "../../store/user";
+import { useAtom } from "jotai";
 
 export interface AttachmentItem {
   fileName: string;
@@ -39,22 +41,22 @@ const renderImages = (
   handleRemoveImage: (index: number) => void
 ) => {
   return (
-    <div className='grid grid-cols-3 gap-2 place-items-center'>
+    <div className="grid grid-cols-3 gap-2 place-items-center">
       {data.map((image, index) => {
         return (
-          <div className='relative'>
+          <div className="relative">
             <img
-              src='/icon_close.png'
-              className='absolute top-1 right-1 cursor-pointer  w-[24px] h-[24px]'
+              src="/icon_close.png"
+              className="absolute top-1 right-1 cursor-pointer  w-[24px] h-[24px]"
               onClick={() => handleRemoveImage(index)}
             />
             <img
-              className='image rounded-md w-[150px] h-[150px]'
+              className="image rounded-md w-[150px] h-[150px]"
               style={{
-                objectFit: 'cover',
+                objectFit: "cover",
               }}
               src={image}
-              alt=''
+              alt=""
               key={image}
             />
           </div>
@@ -80,47 +82,49 @@ const BuzzForm = ({
   } = buzzFormHandle;
   const isQuoted = !isNil(quotePin);
 
+  const [currentChain] = useAtom(currentChainAtom);
+
   return (
     <form
       onSubmit={handleSubmit(onCreateSubmit)}
-      className='mt-8 flex flex-col gap-6'
+      className="mt-8 flex flex-col gap-6"
     >
-      <div className='flex flex-col gap-2 '>
+      <div className="flex flex-col gap-2 ">
         <div
-          className={cls('relative rounded-md  ', {
-            'p-4 border-white/20 rounded-md border': isQuoted,
+          className={cls("relative rounded-md  ", {
+            "p-4 border-white/20 rounded-md border": isQuoted,
           })}
         >
           <textarea
             placeholder={
               isQuoted
-                ? 'When you repost a buzz, you can leave this area empty.'
-                : ''
+                ? "When you repost a buzz, you can leave this area empty."
+                : ""
             }
             className={cls(
-              'textarea textarea-bordered focus:outline-none border-none  text-white bg-[black] textarea-sm h-[160px] w-full ',
+              "textarea textarea-bordered focus:outline-none border-none  text-white bg-[black] textarea-sm h-[160px] w-full ",
               {
-                'textarea-error': errors.content,
+                "textarea-error": errors.content,
               }
             )}
-            {...register('content', { required: !isQuoted })}
+            {...register("content", { required: !isQuoted })}
           />
 
           {errors.content && !isQuoted && (
-            <span className='text-error absolute left-0 bottom-[-24px] text-sm'>
+            <span className="text-error absolute left-0 bottom-[-24px] text-sm">
               Buzz content can't be empty.
             </span>
           )}
           {isQuoted && (
-            <div className='p-2'>
+            <div className="p-2">
               <ForwardBuzzCard buzzItem={quotePin} />
             </div>
           )}
         </div>
-        <div className='flex items-center self-end gap-2'>
+        <div className="flex items-center self-end gap-2">
           {!isNil(filesPreview) && filesPreview.length !== 0 && (
             <div
-              className='btn btn-xs btn-outline font-normal text-white'
+              className="btn btn-xs btn-outline font-normal text-white"
               onClick={onClearImageUploads}
             >
               clear current uploads
@@ -128,9 +132,9 @@ const BuzzForm = ({
           )}
           <div
             onClick={() => {
-              document.getElementById('addImage')!.click();
+              document.getElementById("addImage")!.click();
             }}
-            className='btn btn-xs btn-outline font-normal text-white '
+            className="btn btn-xs btn-outline font-normal text-white "
           >
             <Image size={16} />
             Select Image(s)
@@ -138,31 +142,31 @@ const BuzzForm = ({
         </div>
         <Controller
           control={buzzFormHandle.control}
-          name='images'
+          name="images"
           render={({ field: { onChange } }) => (
             <input
-              type='file'
-              accept='.gif,.jpg,.jpeg,.png,.webp'
+              type="file"
+              accept=".gif,.jpg,.jpeg,.png,.webp"
               multiple
-              id='addImage'
-              className='hidden'
-              {...register('images')}
+              id="addImage"
+              className="hidden"
+              {...register("images")}
               onChange={(e) => {
                 const files = e.target.files;
-                console.log(e.target.files![0].type, 'file----type');
+                console.log(e.target.files![0].type, "file----type");
                 if (!isNil(files) && files.length > 0) {
                   for (const item of Array.from(files ?? [])) {
                     if (item.size > 200 * 1024) {
                       alert(
                         `File size cannot be greater than 200kb (filename: ${item.name})`
                       );
-                      e.target.value = ''; // clear file input value
+                      e.target.value = ""; // clear file input value
                       return;
                     }
                   }
-                  if (getValues('images').length > 0) {
+                  if (getValues("images").length > 0) {
                     const mergeRes = mergeFileLists(
-                      getValues('images'),
+                      getValues("images"),
                       files!
                     );
 
@@ -193,13 +197,14 @@ const BuzzForm = ({
 				</div>
 			</div> */}
 
-      <CustomFeerate />
+      {/* <CustomFeerate /> */}
+      {currentChain === 'BTC' && <CustomFeerate />}
 
       <button
-        className='btn btn-primary btn-sm rounded-full font-medium w-[80px] flex self-center'
-        type='submit'
+        className="btn btn-primary btn-sm rounded-full font-medium w-[80px] flex self-center"
+        type="submit"
       >
-        {isQuoted ? 'Repost' : 'Post'}
+        {isQuoted ? "Repost" : "Post"}
       </button>
     </form>
   );

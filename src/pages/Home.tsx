@@ -1,22 +1,37 @@
-import { ArrowBigUpDash } from 'lucide-react';
-import BuzzList from '../components/BuzzList';
+import { ArrowBigUpDash } from "lucide-react";
+import BuzzList from "../components/BuzzList";
 
 // import RecommendUsers from "../components/RecommendUsers";
 type Iprops = {
   onScrollToTop: () => void;
+  mostHoders: any;
+  latestLaunch: any;
+  mostPopular: any;
+  fastToTop: any;
 };
 
 // raw
 
-const Home = ({ onScrollToTop }: Iprops) => {
+const Home = ({
+  onScrollToTop,
+  mostHoders,
+  latestLaunch,
+  mostPopular,
+  fastToTop,
+}: Iprops) => {
   return (
     <>
-      <main className='relative'>
+      <main className="relative">
         {/* <RecommendUsers /> */}
 
-        <BuzzList />
+        <BuzzList
+          mostHoders={mostHoders}
+          latestLaunch={latestLaunch}
+          mostPopular={mostPopular}
+          fastToTop={fastToTop}
+        />
         <ArrowBigUpDash
-          className='fixed bottom-2 right-[5px] lg:right-[20px] w-10 h-10 cursor-pointer hover:text-main'
+          className="fixed bottom-2 right-[5px] lg:right-[20px] w-10 h-10 cursor-pointer hover:text-main"
           onClick={onScrollToTop}
         />
       </main>

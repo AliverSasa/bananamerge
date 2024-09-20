@@ -303,7 +303,7 @@ const ProfileCard = ({ address, isDropdown = false }: Iprops) => {
         </div>
 
         <div className='flex flex-col gap-5 items-end self-end'>
-          {btcConnector?.metaid !== profileUserData?.data?.metaid && (
+          {/* {btcConnector?.metaid !== profileUserData?.data?.metaid && (
             <FollowButton
               isFollowed={(myFollowingListData?.list ?? []).includes(
                 profileUserData?.data?.metaid
@@ -326,7 +326,7 @@ const ProfileCard = ({ address, isDropdown = false }: Iprops) => {
               }
               handleFollow={handleFollow}
             />
-          )}
+          )} */}
 
           <div
             className='flex self-center text-[12px] md:text-[14px] cursor-pointer'

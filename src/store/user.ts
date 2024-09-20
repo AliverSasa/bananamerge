@@ -22,9 +22,13 @@ export type UserInfo = {
 
 export const connectedAtom = atomWithStorage<boolean>('connectedAtom', false);
 export const btcConnectorAtom = atom<IBtcConnector | null>(null);
+export const mvcConnectorAtom = atom(null);
 export const userInfoAtom = atom<UserInfo | null>(null);
 
 export const walletAtom = atom<IMetaletWalletForBtc | undefined>(undefined);
+export const mvcWalletAtom = atom(undefined);
+
+export const currentChainAtom = atomWithStorage('currentChainAtom','');
 
 // export const userInfoAtom = atom<UserInfo | null>(null);
 /**
@@ -49,6 +53,16 @@ export const walletRestoreParamsAtom = atomWithStorage<
     }
   | undefined
 >('walletRestoreParamsAtom', undefined);
+
+export const mvcWalletRestoreParamsAtom = atomWithStorage<
+  | {
+      address: string;
+      xpub: string;
+    }
+  | undefined
+>('mvcWalletRestoreParamsAtom', undefined);
+
+
 
 export const myFollowingListAtom = atomWithStorage<string[]>(
   'myFollowingListAtom',

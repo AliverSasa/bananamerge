@@ -14,9 +14,10 @@
   },
   "dependencies": {
     "@mantine/hooks": "^7.7.0",
-    "@metaid/metaid": "^1.4.3",
+    "@metaid/metaid": "^1.5.6",
     "@tanstack/react-query": "^5.13.4",
     "@tanstack/react-query-devtools": "^5.13.5",
+    "antd": "^5.20.6",
     "axios": "^1.6.7",
     "buffer": "^6.0.3",
     "classnames": "^2.5.1",

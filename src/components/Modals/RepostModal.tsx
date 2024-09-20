@@ -1,12 +1,13 @@
-import { IBtcConnector } from '@metaid/metaid';
+import { IBtcConnector,IMvcConnector } from '@metaid/metaid';
 import { Pin } from '../../api/request';
 import BuzzFormWrap from '../BuzzFormWrap';
 
 type Iprops = {
   btcConnector: IBtcConnector;
+  mvcConnector: IMvcConnector;
   quotePin: Pin;
 };
-const RepostModal = ({ btcConnector, quotePin }: Iprops) => {
+const RepostModal = ({ btcConnector,mvcConnector, quotePin }: Iprops) => {
   return (
     <dialog id={'repost_buzz_modal_' + quotePin.id} className='modal !z-20'>
       <div className='modal-box bg-[#191C20] !z-20 py-5 w-[90%] lg:w-[50%]'>
@@ -19,7 +20,7 @@ const RepostModal = ({ btcConnector, quotePin }: Iprops) => {
         <h3 className='font-medium text-white text-[16px] text-center'>
           Repost Buzz
         </h3>
-        <BuzzFormWrap btcConnector={btcConnector!} quotePin={quotePin} />
+        <BuzzFormWrap btcConnector={btcConnector!} mvcConnector={mvcConnector!} quotePin={quotePin} />
       </div>
       <form method='dialog' className='modal-backdrop'>
         <button>close</button>

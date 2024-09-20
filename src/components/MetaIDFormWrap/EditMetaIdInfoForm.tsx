@@ -8,8 +8,8 @@ import { image2Attach } from '../../utils/file';
 import { MetaidUserInfo } from './CreateMetaIDFormWrap';
 import { useEffect } from 'react';
 
-import { useAtomValue } from 'jotai';
-import { globalFeeRateAtom } from '../../store/user';
+import { useAtomValue,useAtom } from 'jotai';
+import { globalFeeRateAtom,currentChainAtom } from '../../store/user';
 import { environment } from '../../utils/environments';
 import CustomFeerate from '../Public/CustomFeerate';
 
@@ -50,6 +50,7 @@ const EditMetaIdInfoForm = ({ onSubmit, initialValues }: IProps) => {
 
   const avatar = watch('avatar');
   const [filesPreview, setFilesPreview] = useImagesPreview(avatar);
+  const [currentChain] = useAtom(currentChainAtom);
   const onCreateSubmit: SubmitHandler<FormUserInfo> = async (data) => {
     const submitAvatar =
       !isNil(data?.avatar) && data.avatar.length !== 0
@@ -187,7 +188,7 @@ const EditMetaIdInfoForm = ({ onSubmit, initialValues }: IProps) => {
           )}
         </div>
 
-        <CustomFeerate />
+        {currentChain === 'BTC' && <CustomFeerate />}
 
         {/* <div className="flex flex-col gap-2">
 					<div className="text-white">Your Bio</div>
